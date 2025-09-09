@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { navBasePath, navLinks } from './constants';
 import type { NavbarProps } from './interfaces/NavbarProps';
 
 // SVG Icon for the menu (hamburger)
@@ -14,8 +15,6 @@ const CloseIcon = ({ className }: { className?: string }) => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
   </svg>
 );
-
-const basename = "/Test_Directory";
 
 // The Navigation Bar Component
 export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
@@ -42,14 +41,9 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
     };
   }, []); // Empty dependency array means this effect runs only once on mount
 
-  const navLinks = [
-    { name: "Travelogue", path: "Travelogue" },
-    // { name: "Contact", path: "Contact" },
-  ];
-
   const handleNavClick = (path: string) => {
     if (currentPage !== path) {
-        const url = path === 'Home' ? `${basename}/` : `${basename}/${path}`;
+        const url = path === '' ? `${navBasePath}/` : `${navBasePath}/${path}`;
         window.history.pushState({ page: path }, '', url);
         onNavigate(path);
     }
@@ -62,7 +56,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href={`${basename}/`} onClick={(e) => { e.preventDefault(); handleNavClick('Home'); }} className="text-white text-2xl font-bold tracking-wider">
+            <a href={`${navBasePath}/`} onClick={(e) => { e.preventDefault(); handleNavClick(''); }} className="text-white text-2xl font-bold tracking-wider">
               LOGO
             </a>
           </div>
@@ -72,12 +66,12 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
             <div className="ml-10 flex items-baseline space-x-8">
               {navLinks.map((link) => (
                 <a
-                  key={link.name}
-                  href={`${basename}/${link.path}`}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
-                  className={`${currentPage === link.path ? 'text-white' : 'text-gray-300'} hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors`}
+                  key={link}
+                  href={`${navBasePath}/${link}`}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(link); }}
+                  className={`${currentPage === link ? 'text-white' : 'text-gray-300'} hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors`}
                 >
-                  {link.name}
+                  {link}
                 </a>
               ))}
             </div>
@@ -105,12 +99,12 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-black">
             {navLinks.map((link) => (
               <a
-                key={link.name}
-                href={`${basename}/${link.path}`}
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
-                className={`${currentPage === link.path ? 'text-white bg-gray-700' : 'text-gray-300'} hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                key={link}
+                href={`${navBasePath}/${link}`}
+                onClick={(e) => { e.preventDefault(); handleNavClick(link); }}
+                className={`${currentPage === link ? 'text-white bg-gray-700' : 'text-gray-300'} hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors`}
               >
-                {link.name}
+                {link}
               </a>
             ))}
           </div>

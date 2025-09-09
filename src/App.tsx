@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
+import { navBasePath, navPageNames } from "./features/navigation-bar/constants";
 import { Navbar } from "./features/navigation-bar/Navbar";
 import { HomePage } from "./pages/home/HomePage";
 import { TraveloguePage } from "./pages/travelogue/TraveloguePage";
-
-const basename = "/Test_Directory";
+import { NotFoundPage } from "./pages/not-found/NotFoundPage";
 
 const getPageFromPath = () => {
     const path = window.location.pathname;
     let pagePath = '';
-    if (path.startsWith(basename)) {
-        pagePath = path.substring(basename.length);
+    if (path.startsWith(navBasePath)) {
+        pagePath = path.substring(navBasePath.length);
     } else {
         pagePath = path;
     }
@@ -17,13 +17,8 @@ const getPageFromPath = () => {
     // remove leading slash
     pagePath = pagePath.startsWith('/') ? pagePath.substring(1) : pagePath;
 
-    if (pagePath === "") {
-        return "Home";
-    }
-
     return pagePath;
 };
-
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(getPageFromPath());
@@ -51,11 +46,12 @@ export default function App() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case "Travelogue":
+      case navPageNames.Travelogue:
         return <TraveloguePage />;
-      case "Home":
-      default:
+      case "":
         return <HomePage />;
+      default:
+        return <NotFoundPage />;
     }
   };
 
