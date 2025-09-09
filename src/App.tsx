@@ -3,13 +3,25 @@ import { Navbar } from "./features/navigation-bar/Navbar";
 import { HomePage } from "./pages/home/HomePage";
 import { TraveloguePage } from "./pages/travelogue/TraveloguePage";
 
+const basename = "/Test_Directory";
+
 const getPageFromPath = () => {
     const path = window.location.pathname;
-    if (path === "/") {
+    let pagePath = '';
+    if (path.startsWith(basename)) {
+        pagePath = path.substring(basename.length);
+    } else {
+        pagePath = path;
+    }
+
+    // remove leading slash
+    pagePath = pagePath.startsWith('/') ? pagePath.substring(1) : pagePath;
+
+    if (pagePath === "") {
         return "Home";
     }
-    // Assumes path is in the format /PageName
-    return path.substring(1);
+
+    return pagePath;
 };
 
 

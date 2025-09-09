@@ -15,6 +15,7 @@ const CloseIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const basename = "/Test_Directory";
 
 // The Navigation Bar Component
 export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
@@ -48,7 +49,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
 
   const handleNavClick = (path: string) => {
     if (currentPage !== path) {
-        const url = path === 'Home' ? '/' : `/${path}`;
+        const url = path === 'Home' ? `${basename}/` : `${basename}/${path}`;
         window.history.pushState({ page: path }, '', url);
         onNavigate(path);
     }
@@ -61,7 +62,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('Home'); }} className="text-white text-2xl font-bold tracking-wider">
+            <a href={`${basename}/`} onClick={(e) => { e.preventDefault(); handleNavClick('Home'); }} className="text-white text-2xl font-bold tracking-wider">
               LOGO
             </a>
           </div>
@@ -72,7 +73,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
               {navLinks.map((link) => (
                 <a
                   key={link.name}
-                  href={`/${link.path}`}
+                  href={`${basename}/${link.path}`}
                   onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
                   className={`${currentPage === link.path ? 'text-white' : 'text-gray-300'} hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors`}
                 >
@@ -92,7 +93,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
-              {isMenuOpen ? <CloseIcon className="block h-6 w-6" /> : <MenuIcon className="block h-6 w-6" />}
+              {isMenuOpen ? <CloseIcon className="block h-6 w-6" /> : <MenuIcon className="block h-6 w-6" /> }
             </button>
           </div>
         </div>
@@ -105,7 +106,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
             {navLinks.map((link) => (
               <a
                 key={link.name}
-                href={`/${link.path}`}
+                href={`${basename}/${link.path}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
                 className={`${currentPage === link.path ? 'text-white bg-gray-700' : 'text-gray-300'} hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors`}
               >
