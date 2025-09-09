@@ -1,0 +1,208 @@
+import React, { useState, useEffect } from 'react';
+
+// SVG Icon for the menu (hamburger)
+const MenuIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+  </svg>
+);
+
+// SVG Icon for the close button
+const CloseIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
+
+// --- Navigation Bar Component ---
+interface NavbarProps {
+  currentPage: string;
+  onNavigate: (page: string) => void;
+}
+
+const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: "Itineraries", path: "Itineraries" },
+    { name: "Contact", path: "Contact" },
+  ];
+
+  const handleNavClick = (path: string) => {
+    onNavigate(path);
+    setIsMenuOpen(false); // Close mobile menu on navigation
+  };
+
+  return (
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ease-in-out ${isScrolled ? 'bg-black shadow-lg' : 'bg-transparent'}`}>
+      <div className="px-4 sm:px-6">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <a href="#" onClick={() => handleNavClick('Home')} className="text-white text-2xl font-bold tracking-wider">
+              LOGO
+            </a>
+          </div>
+
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-8">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
+                  className={`${currentPage === link.path ? 'text-white' : 'text-gray-300'} hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors`}
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="-mr-2 flex md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              type="button"
+              className="bg-gray-900/50 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+            >
+              <span className="sr-only">Open main menu</span>
+              {isMenuOpen ? <CloseIcon className="block h-6 w-6" /> : <MenuIcon className="block h-6 w-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden" id="mobile-menu">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-black">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href="#"
+                onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
+                className={`${currentPage === link.path ? 'text-white bg-gray-700' : 'text-gray-300'} hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+// --- Page Components ---
+
+const HomePage = () => (
+  <>
+    <header 
+      className="h-screen bg-cover bg-center flex items-center justify-center text-white" 
+      style={{ backgroundImage: "url('https://placehold.co/1920x1080/2d3748/ffffff?text=Scroll+Down')" }}
+    >
+      <div className="text-center bg-black bg-opacity-50 p-8 rounded-lg">
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-4">Explore the World</h1>
+        <p className="text-xl md:text-2xl font-light">Your journey begins here. Scroll to see the navbar effect.</p>
+      </div>
+    </header>
+    
+    <section className="py-20">
+        <div className="max-w-4xl mx-auto text-gray-300 px-4">
+            <h2 className="text-4xl font-bold text-center text-white mb-12">Our Content Section</h2>
+            <p className="mb-6 text-lg leading-relaxed">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </div>
+    </section>
+
+    <section 
+      className="h-96 bg-cover bg-center" 
+      style={{ backgroundImage: "url('https://placehold.co/1200x400/1a202c/4a5568?text=Another+Section')" }}
+    />
+
+     <section className="py-20">
+        <div className="max-w-4xl mx-auto text-gray-300 px-4">
+            <h2 className="text-4xl font-bold text-center text-white mb-12">More to Discover</h2>
+            <p className="mb-6 text-lg leading-relaxed">
+                Phasellus et nisl quis enim dignissim suscipit. Sed pellentesque, dolor sit amet elementum iaculis, dolor sem sodales ante, vel posuere sapien magna sed purus.
+            </p>
+        </div>
+    </section>
+  </>
+);
+
+const ItinerariesPage = () => (
+  <div className="pt-24 min-h-screen flex items-center justify-center">
+    <div className="max-w-4xl mx-auto text-gray-300 px-4 text-center">
+      <h1 className="text-5xl font-bold text-white mb-8">Our Itineraries</h1>
+      <p className="text-xl leading-relaxed">
+        Discover our curated travel itineraries. Full details and booking information will be available here soon.
+      </p>
+    </div>
+  </div>
+);
+
+const ContactPage = () => (
+  <div className="pt-24 min-h-screen flex items-center justify-center">
+    <div className="max-w-4xl mx-auto text-gray-300 px-4 text-center">
+      <h1 className="text-5xl font-bold text-white mb-8">Contact Us</h1>
+      <p className="text-xl leading-relaxed">
+        Get in touch with our team via email at <a href="mailto:contact@example.com" className="text-blue-400 hover:underline">contact@example.com</a>.
+      </p>
+    </div>
+  </div>
+);
+
+
+// --- Main App Component ---
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('Home');
+
+  // When currentPage changes, scroll to the top of the page.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'Itineraries':
+        return <ItinerariesPage />;
+      case 'Contact':
+        return <ContactPage />;
+      case 'Home':
+      default:
+        return <HomePage />;
+    }
+  };
+
+  return (
+    <div className="bg-gray-800 min-h-screen font-sans">
+      <Navbar currentPage={currentPage} onNavigate={setCurrentPage} />
+
+      <main>
+        {renderPage()}
+      </main>
+
+      <footer className="bg-black text-white text-center p-6">
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}
+

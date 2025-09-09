@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import type { NavbarProps } from './interfaces/NavbarProps';
 
 // SVG Icon for the menu (hamburger)
 const MenuIcon = ({ className }: { className?: string }) => (
@@ -16,7 +17,7 @@ const CloseIcon = ({ className }: { className?: string }) => (
 
 
 // The Navigation Bar Component
-const Navbar = () => {
+export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -40,7 +41,15 @@ const Navbar = () => {
     };
   }, []); // Empty dependency array means this effect runs only once on mount
 
-  const navLinks = ["Itineraries", "Contact"];
+  const navLinks = [
+    { name: "Travelogue", path: "Travelogue" },
+    // { name: "Contact", path: "Contact" },
+  ];
+
+  const handleNavClick = (path: string) => {
+    onNavigate(path);
+    setIsMenuOpen(false); // Close mobile menu on navigation
+  };
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ease-in-out ${isScrolled ? 'bg-black shadow-lg' : 'bg-transparent'}`}>
@@ -58,11 +67,12 @@ const Navbar = () => {
             <div className="ml-10 flex items-baseline space-x-8">
               {navLinks.map((link) => (
                 <a
-                  key={link}
+                  key={link.name}
                   href="#"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
+                  className={`${currentPage === link.path ? 'text-white' : 'text-gray-300'} hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors`}
                 >
-                  {link}
+                  {link.name}
                 </a>
               ))}
             </div>
@@ -90,11 +100,12 @@ const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-black">
             {navLinks.map((link) => (
               <a
-                key={link}
+                key={link.name}
                 href="#"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
+                className={`${currentPage === link.path ? 'text-white bg-gray-700' : 'text-gray-300'} hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors`}
               >
-                {link}
+                {link.name}
               </a>
             ))}
           </div>
@@ -103,5 +114,3 @@ const Navbar = () => {
     </nav>
   );
 };
-
-export default Navbar;
