@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react';
 import { navBasePath, navLinks } from './constants';
-import type { NavbarProps } from './interfaces/NavbarProps';
+import { MenuIcon } from './components/MenuIcon';
+import { CloseIcon } from './components/CloseIcon';
 
-// SVG Icon for the menu (hamburger)
-const MenuIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
-  </svg>
-);
-
-// SVG Icon for the close button
-const CloseIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-  </svg>
-);
+interface NavbarProps {
+  currentPage: string;
+  onNavigate: (page: string) => void;
+}
 
 // The Navigation Bar Component
 export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {

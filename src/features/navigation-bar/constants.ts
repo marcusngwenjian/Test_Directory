@@ -1,4 +1,4 @@
-export const navBasePath = "/Test_Directory";
+export const navBasePath = "";
 
 export const navPageNames = {
   Travelogue: "Travelogue",
